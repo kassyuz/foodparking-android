@@ -1,6 +1,9 @@
 package com.mobile.foodparking;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
@@ -58,7 +61,12 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new GeoWebChromeClient());
 
         //load URL
-        mWebView.loadUrl("http://foodparking.com");
+        if(isOnline()){
+            mWebView.loadUrl("http://foodparking.com");
+        } else{
+            mWebView.loadData("Sem conexão", "text/plain", "UTF8");
+
+        }
     }
 
     @Override
@@ -68,5 +76,12 @@ public class MainActivity extends Activity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    private boolean isOnline(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (networkInfo != null && networkInfo.isConnectedOrConnecting());
     }
 }
