@@ -22,4 +22,13 @@
         android:text="Refresh" >
     </Button>
 
+    <Button
+        android:id="@+id/testeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Teste" >
+    </Button>
+
 </RelativeLayout>

@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
 
     private WebView mWebView;
     private Button refreshButton;
+    private Button testeButton;
 
 
     /**
@@ -55,6 +56,26 @@ public class MainActivity extends Activity {
 
         mWebView = (WebView) findViewById(R.id.activity_main_webview);
         refreshButton = (Button) findViewById(R.id.refreshButton);
+
+
+
+        /**
+         * TESTES COM BOTOES PARA CHAMAR EVENTOS JAVASCRIPT
+         * */
+        testeButton = (Button) findViewById(R.id.testeButton);
+
+        testeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.loadUrl("javascript:refresh();");
+
+            }
+        });
+
+
+        /**
+         * TESTES COM BOTOES PARA CHAMAR EVENTOS JAVASCRIPT
+         * */
 
         // Brower niceties -- pinch / zoom, follow links in place
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
