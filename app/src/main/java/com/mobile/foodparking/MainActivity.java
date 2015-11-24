@@ -1,11 +1,15 @@
 package com.mobile.foodparking;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
@@ -20,6 +24,7 @@ public class MainActivity extends Activity {
     private WebView mWebView;
     private Button refreshButton;
     private Button testeButton;
+    private static final int REQUEST_CODE_LOCATION = 2;
 
 
     /**
@@ -52,30 +57,31 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestLocationPermission(this);
         setContentView(R.layout.activity_main);
 
         mWebView = (WebView) findViewById(R.id.activity_main_webview);
         refreshButton = (Button) findViewById(R.id.refreshButton);
 
+        /**
+         * TESTES COM BOTOES PARA CHAMAR EVENTOS JAVASCRIPT
+         * */
+//        testeButton = (Button) findViewById(R.id.testeButton);
+//
+//        testeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mWebView.loadUrl("javascript:refresh();");
+//
+//            }
+//        });
 
 
         /**
          * TESTES COM BOTOES PARA CHAMAR EVENTOS JAVASCRIPT
          * */
-        testeButton = (Button) findViewById(R.id.testeButton);
-
-        testeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWebView.loadUrl("javascript:refresh();");
-
-            }
-        });
 
 
-        /**
-         * TESTES COM BOTOES PARA CHAMAR EVENTOS JAVASCRIPT
-         * */
 
         // Brower niceties -- pinch / zoom, follow links in place
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -84,6 +90,7 @@ public class MainActivity extends Activity {
         mWebView.setWebViewClient(new GeoWebViewClient());
 
         // Below required for geolocation
+
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setGeolocationEnabled(true);
         mWebView.setWebChromeClient(new GeoWebChromeClient());
@@ -107,7 +114,7 @@ public class MainActivity extends Activity {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               withNetworkConnection();
+                withNetworkConnection();
             }
         });
 
@@ -133,5 +140,14 @@ public class MainActivity extends Activity {
         Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+
+
+    private void requestLocationPermission(Activity that){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(that, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(that, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
+        }
     }
 }
